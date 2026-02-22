@@ -1,0 +1,140 @@
+/* Clerk Component Styling — Electric Growth Theme */
+
+/* Clerk appearance configuration overrides */
+:root {
+  --clerk-color-primary: #22c55e;
+  --clerk-color-primary-hover: #16a34a;
+  --clerk-color-text-primary: var(--color-text);
+  --clerk-color-text-secondary: var(--color-text-secondary);
+  --clerk-color-background: var(--color-bg);
+  --clerk-color-border: var(--color-border);
+}
+
+/* Clerk form styling */
+.cl-root {
+  font-family: var(--font-body);
+  --cl-primary-color: #22c55e;
+  --cl-secondary-color: var(--color-text-secondary);
+  --cl-danger-color: #ef4444;
+  --cl-success-color: #22c55e;
+  --cl-warning-color: #f59e0b;
+  --cl-neutral-0: var(--color-bg);
+  --cl-neutral-50: var(--color-bg-secondary);
+  --cl-neutral-100: var(--color-bg-tertiary);
+  --cl-neutral-500: var(--color-text-secondary);
+  --cl-neutral-900: var(--color-text);
+}
+
+/* Input styling */
+.cl-formButtonPrimary,
+.cl-button,
+.cl-inputBase {
+  border-radius: 12px;
+  border: 2px solid var(--color-border);
+}
+
+.cl-formButtonPrimary {
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cl-formButtonPrimary:hover {
+  background-color: #16a34a;
+  transform: translateY(-2px);
+}
+
+.cl-formButtonSecondary,
+.cl-button[type="button"] {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border);
+  color: var(--color-text);
+  border-radius: 12px;
+}
+
+.cl-formButtonSecondary:hover,
+.cl-button[type="button"]:hover {
+  background-color: var(--color-bg-tertiary);
+}
+
+.cl-inputBase {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text);
+  border-radius: 12px;
+}
+
+.cl-inputBase:focus,
+.cl-inputBase:focus-visible {
+  border-color: #22c55e;
+  outline: none;
+}
+
+.cl-formField {
+  margin-bottom: 1.5rem;
+}
+
+.cl-formFieldLabel {
+  color: var(--color-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* OAuth buttons (Google, GitHub) */
+.cl-socialButtonsBlockButton {
+  border-radius: 12px;
+  border: 2px solid var(--color-border);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text);
+  transition: all 0.2s;
+}
+
+.cl-socialButtonsBlockButton:hover {
+  border-color: #22c55e;
+  background-color: var(--color-bg-tertiary);
+}
+
+.cl-socialButtonsBlockButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Divider */
+.cl-dividerRow {
+  color: var(--color-text-secondary);
+}
+
+.cl-dividerLine {
+  background-color: var(--color-border);
+}
+
+/* Sign-up link text */
+.cl-footerAction {
+  color: var(--color-text-secondary);
+}
+
+.cl-footerAction a {
+  color: #22c55e;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.cl-footerAction a:hover {
+  text-decoration: underline;
+}
+
+/* Error messages */
+.cl-alertBox {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+  color: #991b1b;
+  border-radius: 12px;
+}
+
+/* Loading spinner color */
+.cl-spinner {
+  --spinner-color: #22c55e;
+}

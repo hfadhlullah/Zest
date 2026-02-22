@@ -1,0 +1,245 @@
+graph:
+  # ── Feature 1: Prompt Generation (ZEST-F01) ──────────────────────────
+  - id: "ZEST-001"
+    title: "Project Scaffold & Infrastructure"
+    layer: "L1-data"
+    epic: "ZEST-F01"
+    status: "pending"
+    depends_on: []
+
+  - id: "ZEST-002"
+    title: "Design System Tokens & Base UI"
+    layer: "L2-ui-foundation"
+    epic: "ZEST-F01"
+    status: "pending"
+    depends_on:
+      - "ZEST-001"
+
+  - id: "ZEST-003"
+    title: "Go AI Service Scaffold"
+    layer: "L3-backend"
+    epic: "ZEST-F01"
+    status: "pending"
+    depends_on:
+      - "ZEST-001"
+
+  - id: "ZEST-004"
+    title: "Generation API Route (Next.js)"
+    layer: "L3-backend"
+    epic: "ZEST-F01"
+    status: "pending"
+    depends_on:
+      - "ZEST-001"
+      - "ZEST-003"
+
+  - id: "ZEST-005"
+    title: "PromptBar Component"
+    layer: "L4-feature-ui"
+    epic: "ZEST-F01"
+    status: "pending"
+    depends_on:
+      - "ZEST-002"
+      - "ZEST-004"
+
+  - id: "ZEST-006"
+    title: "Generation Loader & Canvas Preview"
+    layer: "L4-feature-ui"
+    epic: "ZEST-F01"
+    status: "pending"
+    depends_on:
+      - "ZEST-004"
+      - "ZEST-005"
+
+  - id: "ZEST-007"
+    title: "Homepage & Generation Flow Integration"
+    layer: "L5-integration"
+    epic: "ZEST-F01"
+    status: "pending"
+    depends_on:
+      - "ZEST-005"
+      - "ZEST-006"
+
+  # ── Feature 2: Visual Editor (ZEST-F02) ──────────────────────────────
+  - id: "ZEST-008"
+    title: "Editor Layout Shell"
+    layer: "L2-ui-foundation"
+    epic: "ZEST-F02"
+    status: "pending"
+    depends_on:
+      - "ZEST-002"
+      - "ZEST-006"
+
+  - id: "ZEST-009"
+    title: "Iframe Bridge & Element Selection"
+    layer: "L4-feature-ui"
+    epic: "ZEST-F02"
+    status: "pending"
+    depends_on:
+      - "ZEST-008"
+
+  - id: "ZEST-010"
+    title: "Properties Panel & Style Editing"
+    layer: "L4-feature-ui"
+    epic: "ZEST-F02"
+    status: "pending"
+    depends_on:
+      - "ZEST-009"
+
+  - id: "ZEST-011"
+    title: "Inline Text Editing"
+    layer: "L4-feature-ui"
+    epic: "ZEST-F02"
+    status: "pending"
+    depends_on:
+      - "ZEST-009"
+
+  - id: "ZEST-012"
+    title: "Drag-to-Reposition & Resize"
+    layer: "L4-feature-ui"
+    epic: "ZEST-F02"
+    status: "pending"
+    depends_on:
+      - "ZEST-009"
+
+  - id: "ZEST-013"
+    title: "Layers Panel, Delete & Undo/Redo"
+    layer: "L4-feature-ui"
+    epic: "ZEST-F02"
+    status: "pending"
+    depends_on:
+      - "ZEST-009"
+      - "ZEST-010"
+      - "ZEST-011"
+      - "ZEST-012"
+
+  # ── Feature 3: Chat Refinement (ZEST-F03) ────────────────────────────
+  - id: "ZEST-014"
+    title: "Go AI Service — Refinement Scoped Prompting"
+    layer: "L3-backend"
+    epic: "ZEST-F03"
+    status: "pending"
+    depends_on:
+      - "ZEST-003"
+      - "ZEST-004"
+
+  - id: "ZEST-015"
+    title: "Chat Panel UI & Refinement Integration"
+    layer: "L4-feature-ui"
+    epic: "ZEST-F03"
+    status: "pending"
+    depends_on:
+      - "ZEST-008"
+      - "ZEST-009"
+      - "ZEST-014"
+
+  # ── Feature 4: Code Export (ZEST-F04) ────────────────────────────────
+  - id: "ZEST-016"
+    title: "Export API Route & ZIP Generation"
+    layer: "L3-backend"
+    epic: "ZEST-F04"
+    status: "pending"
+    depends_on:
+      - "ZEST-001"
+      - "ZEST-004"
+
+  - id: "ZEST-017"
+    title: "Export Modal & Code Preview UI"
+    layer: "L4-feature-ui"
+    epic: "ZEST-F04"
+    status: "pending"
+    depends_on:
+      - "ZEST-008"
+      - "ZEST-016"
+
+  # ── Feature 5: Authentication (ZEST-F05) ─────────────────────────────
+  - id: "ZEST-018"
+    title: "Clerk Auth Setup & Middleware"
+    layer: "L1-data"
+    epic: "ZEST-F05"
+    status: "pending"
+    depends_on:
+      - "ZEST-001"
+      - "ZEST-004"
+
+  - id: "ZEST-019"
+    title: "Clerk Webhook Handler — User Sync"
+    layer: "L3-backend"
+    epic: "ZEST-F05"
+    status: "pending"
+    depends_on:
+      - "ZEST-001"
+      - "ZEST-018"
+
+  - id: "ZEST-020"
+    title: "Auth UI — Sign In / Sign Up Pages"
+    layer: "L4-feature-ui"
+    epic: "ZEST-F05"
+    status: "pending"
+    depends_on:
+      - "ZEST-002"
+      - "ZEST-008"
+      - "ZEST-018"
+
+  # ── Feature 6: Project Management (ZEST-F06) ─────────────────────────
+  - id: "ZEST-021"
+    title: "Project CRUD API Routes"
+    layer: "L3-backend"
+    epic: "ZEST-F06"
+    status: "pending"
+    depends_on:
+      - "ZEST-001"
+      - "ZEST-004"
+      - "ZEST-018"
+
+  - id: "ZEST-022"
+    title: "Dashboard Page & Project Cards"
+    layer: "L4-feature-ui"
+    epic: "ZEST-F06"
+    status: "pending"
+    depends_on:
+      - "ZEST-018"
+      - "ZEST-021"
+      - "ZEST-002"
+
+  - id: "ZEST-023"
+    title: "Auto-Save & Project State Sync"
+    layer: "L5-integration"
+    epic: "ZEST-F06"
+    status: "pending"
+    depends_on:
+      - "ZEST-009"
+      - "ZEST-018"
+      - "ZEST-021"
+
+  # ── Feature 7: Freemium Limits (ZEST-F07) ────────────────────────────
+  - id: "ZEST-024"
+    title: "Usage Tracking & Quota Enforcement"
+    layer: "L3-backend"
+    epic: "ZEST-F07"
+    status: "pending"
+    depends_on:
+      - "ZEST-001"
+      - "ZEST-004"
+      - "ZEST-018"
+      - "ZEST-019"
+
+  - id: "ZEST-025"
+    title: "UpgradeWall Component & Usage Indicator"
+    layer: "L4-feature-ui"
+    epic: "ZEST-F07"
+    status: "pending"
+    depends_on:
+      - "ZEST-006"
+      - "ZEST-008"
+      - "ZEST-018"
+      - "ZEST-024"
+
+  # ── Feature 8: Responsive Preview (ZEST-F08) ─────────────────────────
+  - id: "ZEST-026"
+    title: "Viewport Toggle & Canvas Resize"
+    layer: "L4-feature-ui"
+    epic: "ZEST-F08"
+    status: "pending"
+    depends_on:
+      - "ZEST-008"
+      - "ZEST-009"

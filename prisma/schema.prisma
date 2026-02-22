@@ -1,0 +1,165 @@
+// Zest — Prisma Schema
+// Entities: User, Project, Generation, Export, ModerationLog
+// Source of truth: docs/erd/core-erd.md
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum Plan {
+  free
+  paid
+}
+
+enum OutputFormat {
+  html_css
+  tailwind
+}
+
+enum ProviderUsed {
+  glm
+  gemini
+  github_copilot
+}
+
+enum GenerationStatus {
+  success
+  failed
+  moderated
+}
+
+enum ExportFormat {
+  html_css
+  tailwind
+}
+
+enum ModerationAction {
+  blocked
+  allowed
+  reviewed
+}
+
+// ---------------------------------------------------------------------------
+// User
+// ---------------------------------------------------------------------------
+
+model User {
+  id                  String    @id @default(uuid()) @db.Uuid
+  clerk_id            String    @unique @db.VarChar(255)
+  email               String    @unique @db.VarChar(255)
+  plan                Plan      @default(free)
+  generation_count    Int       @default(0)
+  generation_reset_at DateTime  @db.Timestamptz(6)
+  created_at          DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime  @updatedAt @db.Timestamptz(6)
+  deleted_at          DateTime? @db.Timestamptz(6)
+
+  projects        Project[]
+  generations     Generation[]
+  exports         Export[]
+  moderationLogs  ModerationLog[]
+
+  @@index([clerk_id])
+  @@index([email])
+}
+
+// ---------------------------------------------------------------------------
+// Project
+// ---------------------------------------------------------------------------
+
+model Project {
+  id                    String    @id @default(uuid()) @db.Uuid
+  user_id               String    @db.Uuid
+  name                  String    @db.VarChar(100)
+  thumbnail_url         String?   @db.VarChar(500)
+  latest_generation_id  String?   @db.Uuid
+  created_at            DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime  @updatedAt @db.Timestamptz(6)
+  deleted_at            DateTime? @db.Timestamptz(6)
+
+  user              User        @relation(fields: [user_id], references: [id])
+  generations       Generation[] @relation("ProjectGenerations")
+  latestGeneration  Generation?  @relation("LatestGeneration", fields: [latest_generation_id], references: [id])
+
+  @@index([user_id])
+  @@index([deleted_at], map: "idx_projects_not_deleted")
+}
+
+// ---------------------------------------------------------------------------
+// Generation
+// ---------------------------------------------------------------------------
+
+model Generation {
+  id                    String           @id @default(uuid()) @db.Uuid
+  project_id            String?          @db.Uuid
+  user_id               String?          @db.Uuid
+  prompt_hash           String           @db.VarChar(64)
+  output_format         OutputFormat
+  html                  String           @db.Text
+  css                   String?          @db.Text
+  provider_used         ProviderUsed
+  duration_ms           Int
+  token_count           Int?
+  status                GenerationStatus
+  parent_generation_id  String?          @db.Uuid
+  created_at            DateTime         @default(now()) @db.Timestamptz(6)
+
+  project         Project?      @relation("ProjectGenerations", fields: [project_id], references: [id])
+  user            User?         @relation(fields: [user_id], references: [id])
+  parent          Generation?   @relation("RefinementChain", fields: [parent_generation_id], references: [id])
+  refinements     Generation[]  @relation("RefinementChain")
+  exports         Export[]
+
+  // Back-relation for Project.latestGeneration
+  latestForProjects Project[] @relation("LatestGeneration")
+
+  @@index([project_id, created_at(sort: Desc)])
+  @@index([user_id, created_at(sort: Desc)])
+  @@index([prompt_hash, output_format])
+}
+
+// ---------------------------------------------------------------------------
+// Export
+// ---------------------------------------------------------------------------
+
+model Export {
+  id              String       @id @default(uuid()) @db.Uuid
+  generation_id   String       @db.Uuid
+  user_id         String?      @db.Uuid
+  format          ExportFormat
+  file_size_bytes Int
+  created_at      DateTime     @default(now()) @db.Timestamptz(6)
+
+  generation  Generation  @relation(fields: [generation_id], references: [id])
+  user        User?       @relation(fields: [user_id], references: [id])
+
+  @@index([generation_id])
+}
+
+// ---------------------------------------------------------------------------
+// ModerationLog
+// ---------------------------------------------------------------------------
+
+model ModerationLog {
+  id           String           @id @default(uuid()) @db.Uuid
+  prompt_hash  String           @db.VarChar(64)
+  reason       String           @db.VarChar(255)
+  action       ModerationAction
+  user_id      String?          @db.Uuid
+  ip_hash      String?          @db.VarChar(64)
+  created_at   DateTime         @default(now()) @db.Timestamptz(6)
+
+  user  User?  @relation(fields: [user_id], references: [id])
+
+  @@index([created_at(sort: Desc)])
+  @@index([action])
+}
