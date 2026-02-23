@@ -23,14 +23,15 @@ func main() {
 	mod := moderator.New()
 
 	router := providers.NewRouter(
-		providers.NewGLMProvider(),     // Primary   (BR-005)
-		providers.NewGeminiProvider(),  // Secondary
+		providers.NewGeminiProvider(),  // Primary
+		providers.NewGLMProvider(),     // Secondary
 		providers.NewCopilotProvider(), // Tertiary
 	)
 
 	generateHandler := handlers.NewGenerateHandler(router, mod)
 	refineHandler := handlers.NewRefineHandler(router, mod)
 	moderateHandler := handlers.NewModerateHandler(mod)
+	modelsHandler := handlers.NewModelsHandler(router)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
@@ -43,6 +44,7 @@ func main() {
 		json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 	})
 
+	r.Get("/models", modelsHandler.ServeHTTP)
 	r.Post("/generate", generateHandler.ServeHTTP)
 	r.Post("/refine", refineHandler.ServeHTTP)
 	r.Post("/moderate", moderateHandler.ServeHTTP)

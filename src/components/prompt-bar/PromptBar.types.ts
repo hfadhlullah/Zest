@@ -1,3 +1,5 @@
+import type { SelectedModel } from "@/components/model-selector/ModelSelector";
+
 export type OutputFormat = "html_css" | "tailwind";
 
 export interface PromptBarProps {
@@ -15,6 +17,10 @@ export interface PromptBarProps {
   format?: OutputFormat;
   /** Format change handler */
   onFormatChange?: (format: OutputFormat) => void;
+  /** Currently selected model (null = auto) */
+  selectedModel?: SelectedModel | null;
+  /** Model change handler */
+  onModelChange?: (model: SelectedModel | null) => void;
   /** Cycling placeholder suggestions (shown when value is empty) */
   suggestions?: string[];
   /** Additional className for the outer container */

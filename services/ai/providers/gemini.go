@@ -30,7 +30,7 @@ type GeminiProvider struct {
 func NewGeminiProvider() *GeminiProvider {
 	return &GeminiProvider{
 		apiKey: os.Getenv("GEMINI_API_KEY"),
-		model:  "gemini-1.5-flash",
+		model:  "gemini-2.5-flash",
 		client: &http.Client{},
 	}
 }
@@ -38,10 +38,21 @@ func NewGeminiProvider() *GeminiProvider {
 func (p *GeminiProvider) Name() string  { return "gemini" }
 func (p *GeminiProvider) Enabled() bool { return p.apiKey != "" }
 
+func (p *GeminiProvider) Models() []ModelInfo {
+	return []ModelInfo{
+		{ID: "gemini-2.5-flash", DisplayName: "Gemini 2.5 Flash", Provider: "gemini"},
+		{ID: "gemini-2.5-pro", DisplayName: "Gemini 2.5 Pro", Provider: "gemini"},
+	}
+}
+
 func (p *GeminiProvider) Generate(ctx context.Context, req models.GenerationRequest) (string, error) {
+	model := p.model
+	if req.PreferredModel != "" && req.PreferredProvider == p.Name() {
+		model = req.PreferredModel
+	}
 	url := fmt.Sprintf(
 		"https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent?key=%s",
-		p.model, p.apiKey,
+		model, p.apiKey,
 	)
 
 	payload := map[string]any{
@@ -58,7 +69,7 @@ func (p *GeminiProvider) Generate(ctx context.Context, req models.GenerationRequ
 		},
 		"generationConfig": map[string]any{
 			"temperature":     0.7,
-			"maxOutputTokens": 4096,
+			"maxOutputTokens": 8192,
 		},
 	}
 

@@ -54,6 +54,8 @@ export interface GenerateRequestBody {
   output_format?: "html_css" | "tailwind";
   project_id?: string;
   style_hints?: string;
+  preferred_provider?: string;
+  preferred_model?: string;
 }
 
 export interface GenerateResponseData {

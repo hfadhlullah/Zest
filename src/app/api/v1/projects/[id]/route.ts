@@ -10,7 +10,7 @@ import { getProject, updateProject, deleteProject } from "@/lib/project-service"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { userId } = await auth();
@@ -33,8 +33,9 @@ export async function GET(
       );
     }
 
+    const { id } = await params;
     // Get project
-    const project = await getProject(params.id, user.id);
+    const project = await getProject(id, user.id);
 
     if (!project) {
       return NextResponse.json(
@@ -61,7 +62,7 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { userId } = await auth();
@@ -98,8 +99,9 @@ export async function PATCH(
       );
     }
 
+    const { id } = await params;
     // Update project
-    const project = await updateProject(params.id, user.id, parsed.data);
+    const project = await updateProject(id, user.id, parsed.data);
 
     if (!project) {
       return NextResponse.json(
@@ -126,7 +128,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { userId } = await auth();
@@ -149,8 +151,9 @@ export async function DELETE(
       );
     }
 
+    const { id } = await params;
     // Delete project
-    const project = await deleteProject(params.id, user.id);
+    const project = await deleteProject(id, user.id);
 
     if (!project) {
       return NextResponse.json(

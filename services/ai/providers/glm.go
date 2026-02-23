@@ -19,7 +19,7 @@ Output ONLY the raw HTML — no explanations, no markdown, no code fences.
 The HTML must include a <style> block inside <head> for all CSS.
 Use semantic HTML5 elements, responsive design, and modern CSS.`
 
-// GLMProvider calls ZhipuAI GLM-4 via their OpenAI-compatible chat completions API.
+// GLMProvider calls ZhipuAI GLM-4.5-Air via their OpenAI-compatible chat completions API.
 type GLMProvider struct {
 	apiKey  string
 	baseURL string
@@ -30,7 +30,7 @@ type GLMProvider struct {
 func NewGLMProvider() *GLMProvider {
 	return &GLMProvider{
 		apiKey:  os.Getenv("GLM_API_KEY"),
-		baseURL: "https://open.bigmodel.cn/api/paas/v4",
+		baseURL: "https://api.z.ai/api/paas/v4",
 		client:  &http.Client{},
 	}
 }
@@ -38,15 +38,26 @@ func NewGLMProvider() *GLMProvider {
 func (p *GLMProvider) Name() string    { return "glm" }
 func (p *GLMProvider) Enabled() bool   { return p.apiKey != "" }
 
+func (p *GLMProvider) Models() []ModelInfo {
+	return []ModelInfo{
+		{ID: "glm-4.5-air", DisplayName: "GLM-4.5 Air", Provider: "glm"},
+		{ID: "glm-4.5", DisplayName: "GLM-4.5", Provider: "glm"},
+	}
+}
+
 func (p *GLMProvider) Generate(ctx context.Context, req models.GenerationRequest) (string, error) {
+	model := "glm-4.5-air"
+	if req.PreferredModel != "" && req.PreferredProvider == p.Name() {
+		model = req.PreferredModel
+	}
 	payload := map[string]any{
-		"model": "glm-4",
+		"model": model,
 		"messages": []map[string]string{
 			{"role": "system", "content": getSystemPrompt(req, glmSystemPrompt)},
 			{"role": "user", "content": buildUserPrompt(req)},
 		},
 		"temperature": 0.7,
-		"max_tokens":  4096,
+		"max_tokens":  8192,
 	}
 
 	body, err := json.Marshal(payload)

@@ -3,6 +3,7 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { ModelSelector } from "@/components/model-selector/ModelSelector";
 import { useSuggestionCycle } from "./useSuggestionCycle";
 import type { PromptBarProps, OutputFormat } from "./PromptBar.types";
 
@@ -24,6 +25,8 @@ export function PromptBar({
   disabled = false,
   format = "html_css",
   onFormatChange,
+  selectedModel = null,
+  onModelChange,
   suggestions = [],
   className,
 }: PromptBarProps) {
@@ -164,28 +167,40 @@ export function PromptBar({
 
       {/* ── Toolbar row ────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between gap-2">
-        {/* Format toggle */}
-        <button
-          type="button"
-          onClick={toggleFormat}
-          disabled={isDisabled}
-          aria-label={`Output format: ${FORMAT_LABELS[format]}. Click to toggle.`}
-          className={cn(
-            "flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition-colors",
-            isDisabled && "cursor-not-allowed opacity-50"
+        {/* Left side: format toggle + model selector */}
+        <div className="flex items-center gap-2">
+          {/* Format toggle */}
+          <button
+            type="button"
+            onClick={toggleFormat}
+            disabled={isDisabled}
+            aria-label={`Output format: ${FORMAT_LABELS[format]}. Click to toggle.`}
+            className={cn(
+              "flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition-colors",
+              isDisabled && "cursor-not-allowed opacity-50"
+            )}
+            style={{
+              borderColor: "var(--color-border-default)",
+              color: "var(--color-text-secondary)",
+              background: "var(--color-bg-secondary)",
+            }}
+          >
+            <span
+              className="inline-block size-2 rounded-full"
+              style={{ background: "var(--color-brand-primary)" }}
+            />
+            {FORMAT_LABELS[format]}
+          </button>
+
+          {/* Model selector */}
+          {onModelChange && (
+            <ModelSelector
+              value={selectedModel ?? null}
+              onChange={onModelChange}
+              disabled={isDisabled}
+            />
           )}
-          style={{
-            borderColor: "var(--color-border-default)",
-            color: "var(--color-text-secondary)",
-            background: "var(--color-bg-secondary)",
-          }}
-        >
-          <span
-            className="inline-block size-2 rounded-full"
-            style={{ background: "var(--color-brand-primary)" }}
-          />
-          {FORMAT_LABELS[format]}
-        </button>
+        </div>
 
         <div className="flex items-center gap-2">
           {/* Character counter */}
@@ -222,7 +237,7 @@ export function PromptBar({
             {loading ? (
               <>
                 <Spinner />
-                <span className="sr-only">Generating…</span>
+                Generating…
               </>
             ) : (
               <>

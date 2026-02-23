@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import type { ErrorCode, GenerateResponseData } from "@/types/api";
 import type { OutputFormat } from "@/components/prompt-bar/PromptBar.types";
+import type { SelectedModel } from "@/components/model-selector/ModelSelector";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -15,6 +16,7 @@ export interface GenerationState {
   prompt: string;
   result: GenerateResponseData | null;
   format: OutputFormat;
+  selectedModel: SelectedModel | null;
   isLoading: boolean;
   error: GenerationError | null;
 }
@@ -22,6 +24,7 @@ export interface GenerationState {
 export interface GenerationActions {
   setPrompt: (prompt: string) => void;
   setFormat: (format: OutputFormat) => void;
+  setSelectedModel: (model: SelectedModel | null) => void;
   setLoading: (isLoading: boolean) => void;
   setResult: (result: GenerateResponseData) => void;
   setError: (error: GenerationError | null) => void;
@@ -38,6 +41,7 @@ const initialState: GenerationState = {
   prompt: "",
   result: null,
   format: "html_css",
+  selectedModel: null,
   isLoading: false,
   error: null,
 };
@@ -52,6 +56,8 @@ export const useGenerationStore = create<GenerationStore>((set) => ({
   setPrompt: (prompt) => set({ prompt }),
 
   setFormat: (format) => set({ format }),
+
+  setSelectedModel: (selectedModel) => set({ selectedModel }),
 
   setLoading: (isLoading) => set({ isLoading }),
 

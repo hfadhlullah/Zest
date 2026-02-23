@@ -42,6 +42,10 @@ export const generateSchema = z.object({
     .pipe(z.string().max(500, "style_hints must be at most 500 characters."))
     .optional(),
 
+  // Preferred provider/model — optional, user-selected
+  preferred_provider: z.string().optional(),
+  preferred_model: z.string().optional(),
+
   // Refinement context — present when this is a chat refinement (ZEST-014/015)
   previous_generation_id: z.string().optional(),
   previous_html: z.string().optional(),

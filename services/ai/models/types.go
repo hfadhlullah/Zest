@@ -8,6 +8,11 @@ type GenerationRequest struct {
 	Prompt      string     `json:"prompt"`
 	Context     GenContext `json:"context"`
 	Preferences GenPrefs   `json:"preferences"`
+	// PreferredProvider and PreferredModel allow the caller to pin a specific
+	// provider/model. The router will try this provider first; if it fails it
+	// falls back to the normal order.
+	PreferredProvider string `json:"preferred_provider,omitempty"` // e.g. "gemini"
+	PreferredModel    string `json:"preferred_model,omitempty"`    // e.g. "gemini-2.5-pro"
 }
 
 // GenContext carries refinement targeting metadata.

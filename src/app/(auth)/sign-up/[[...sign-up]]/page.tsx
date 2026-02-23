@@ -50,7 +50,8 @@ export default function SignUpPage() {
           },
         },
       }}
-      redirectUrl="/dashboard"
+      fallbackRedirectUrl="/onboarding"
+      forceRedirectUrl="/onboarding"
     />
   );
 }
